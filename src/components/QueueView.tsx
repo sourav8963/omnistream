@@ -283,24 +283,11 @@ export const QueueView: React.FC = () => {
                     </div>
 
                     {/* Progress slider bar */}
-                    <div style={{
-                      height: '7px',
-                      background: 'var(--border)',
-                      borderRadius: 'var(--radius-full)',
-                      overflow: 'hidden',
-                      position: 'relative'
-                    }}>
-                      <div style={{
-                        width: `${progressPercent}%`,
-                        height: '100%',
-                        background: 'var(--accent-gradient)',
-                        borderRadius: 'var(--radius-full)',
-                        transition: 'width 0.3s ease',
-                        position: 'relative',
-                        backgroundImage: item.status === 'downloading' ? 'linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent)' : 'none',
-                        backgroundSize: '15px 15px',
-                        animation: item.status === 'downloading' ? 'progress-animation 1s linear infinite' : 'none'
-                      }}></div>
+                    <div className="progress-bar-track" style={{ height: '7px' }}>
+                      <div 
+                        className={`progress-bar-fill ${item.status === 'downloading' ? 'progress-shimmer-active' : ''}`}
+                        style={{ width: `${progressPercent}%` }}
+                      ></div>
                     </div>
 
                     {/* Speed/ETA Details */}
