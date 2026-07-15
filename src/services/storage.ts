@@ -1,5 +1,5 @@
 export interface Settings {
-  theme: 'system' | 'dark' | 'light';
+  theme: 'dark' | 'dark-classic' | 'light';
   defaultFolder: string;
   defaultVideoQuality: string;
   defaultAudioQuality: string;

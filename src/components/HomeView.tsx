@@ -1,25 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  Search, 
-  Music, 
-  Video, 
-  Rss, 
-  Link2,
-  ArrowRight,
-  Sparkles,
-  Info,
-  Download,
-  X,
-  Languages
+  Info, 
+  Download, 
+  X, 
+  Languages,
+  Zap,
+  Play,
+  Pause,
+  FolderOpen
 } from 'lucide-react';
 import { urlAnalyzer, type AnalysisResult } from '../services/urlAnalyzer';
-import { downloadManager } from '../services/downloadManager';
-
-const Youtube = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" {...props}>
-    <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.53 3.5 12 3.5 12 3.5s-7.53 0-9.388.555A3.002 3.002 0 0 0 .502 6.163C0 8.07 0 12 0 12s0 3.93.502 5.837a3.003 3.003 0 0 0 2.11 2.108C4.47 20.5 12 20.5 12 20.5s7.53 0 9.388-.555a3.002 3.002 0 0 0 2.11-2.108C24 15.93 24 12 24 12s0-3.93-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-  </svg>
-);
+import { downloadManager, type QueueItem } from '../services/downloadManager';
 
 interface HomeViewProps {
   analyzedItem: AnalysisResult | null;
@@ -27,6 +18,45 @@ interface HomeViewProps {
   onClearAnalyzed: () => void;
   setActiveTab: (tab: string) => void;
 }
+
+// Brand SVG Icons for Mockup Fidelity
+const YoutubeSvg = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.53 3.5 12 3.5 12 3.5s-7.53 0-9.388.555A3.002 3.002 0 0 0 .502 6.163C0 8.07 0 12 0 12s0 3.93.502 5.837a3.003 3.003 0 0 0 2.11 2.108C4.47 20.5 12 20.5 12 20.5s7.53 0 9.388-.555a3.002 3.002 0 0 0 2.11-2.108C24 15.93 24 12 24 12s0-3.93-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+  </svg>
+);
+
+const SoundcloudSvg = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M1.77 12.38a1.27 1.27 0 0 0 .33.88l1.45 1.45a.44.44 0 0 0 .62 0l1.45-1.45a1.28 1.28 0 0 0 0-1.76L4.17 10.05a.44.44 0 0 0-.62 0L2.1 11.5a1.27 1.27 0 0 0-.33.88zm4.43.88l1.45 1.45a.44.44 0 0 0 .62 0l1.45-1.45a1.28 1.28 0 0 0 0-1.76L8.27 10.05a.44.44 0 0 0-.62 0L6.2 11.5a1.27 1.27 0 0 0 0 1.76zm4.43.88l1.45 1.45a.44.44 0 0 0 .62 0l1.45-1.45a1.28 1.28 0 0 0 0-1.76L12.37 10.05a.44.44 0 0 0-.62 0L10.3 11.5a1.27 1.27 0 0 0 0 1.76zm6.2-.88v-4.4a3.1 3.1 0 0 0-3.1-3.1 3.1 3.1 0 0 0-3.1 3.1v4.4a3.1 3.1 0 0 0 6.2 0zm5.4-1.76a2.2 2.2 0 0 0-2.2-2.2v4.4a2.2 2.2 0 0 0 2.2-2.2z"/>
+  </svg>
+);
+
+const VimeoSvg = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M22.396 7.111c-.085 1.897-1.417 4.5-3.992 7.81-2.664 3.428-4.922 5.143-6.776 5.143-1.153 0-2.128-1.064-2.924-3.193l-1.597-5.836c-.596-2.18-1.24-3.27-1.928-3.27-.148 0-.663.308-1.547.925l-.927-1.19c.97-.852 1.93-1.69 2.87-2.51 1.28-1.1 2.227-1.69 2.836-1.77 1.418-.18 2.287.785 2.61 2.896l1.32 5.253c.355 1.58.742 2.37 1.164 2.37.33 0 .843-.522 1.54-1.564.698-1.042 1.077-1.84 1.14-2.397.13-.984-.25-1.477-1.137-1.477-.417 0-.89.096-1.424.288 1.07-3.486 3.107-5.187 6.108-5.102 2.203.062 3.25 1.48 3.14 4.254z"/>
+  </svg>
+);
+
+const TwitchSvg = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
+  </svg>
+);
+
+const TiktokSvg = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M12.525.02c1.31 0 2.568.27 3.716.757.074.887.41 1.7.94 2.375.76.966 1.83 1.636 3.05 1.866v3.42a8.55 8.55 0 0 1-3.99-1.2v7.195a6.43 6.43 0 1 1-7.14-6.386v3.435a2.99 2.99 0 1 0 3.71 2.95V0h3.714Z"/>
+  </svg>
+);
+
+const RssSvg = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 11a9 9 0 0 1 9 9" />
+    <path d="M4 4a16 16 0 0 1 16 16" />
+    <circle cx="5" cy="19" r="1" fill="currentColor" />
+  </svg>
+);
 
 export const HomeView: React.FC<HomeViewProps> = ({
   analyzedItem,
@@ -44,6 +74,17 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const [selectedSubtitles, setSelectedSubtitles] = useState<string[]>([]);
   const [thumbnailDownloadLoading, setThumbnailDownloadLoading] = useState(false);
 
+  // Recent activity list
+  const [activeQueue, setActiveQueue] = useState<QueueItem[]>([]);
+
+  useEffect(() => {
+    // Monitor the active queue for enqueued items
+    const unsubscribe = downloadManager.subscribe((queue) => {
+      setActiveQueue(queue.slice(0, 3)); // show top 3
+    });
+    return () => unsubscribe();
+  }, []);
+
   const handleAnalyze = async (urlToAnalyze?: string) => {
     const targetUrl = urlToAnalyze || url;
     if (!targetUrl.trim()) {
@@ -58,7 +99,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
       const result = await urlAnalyzer.analyze(targetUrl);
       onAnalyzeSuccess(result);
       
-      // Auto-populate default configurations for single files
       if (result.type !== 'playlist' && result.type !== 'podcast') {
         const defaultQuality = result.qualities[0];
         if (defaultQuality) {
@@ -67,7 +107,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
         }
         setSelectedSubtitles([]);
       } else {
-        // Go to playlist preview tab
         setActiveTab('playlist');
       }
     } catch (err: any) {
@@ -84,10 +123,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   const handleQueueDownload = () => {
     if (!analyzedItem) return;
-
     const qualityObj = analyzedItem.qualities.find(q => q.id === selectedQualityId) || analyzedItem.qualities[0];
     
-    // Add to download queue
     downloadManager.addToQueue([{
       title: analyzedItem.title,
       artist: analyzedItem.artist,
@@ -99,7 +136,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
       platform: analyzedItem.platform,
     }]);
 
-    // Go to Download Manager
     setActiveTab('queue');
   };
 
@@ -116,7 +152,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
     setThumbnailDownloadLoading(true);
     
     setTimeout(() => {
-      // Create a dummy image download
       const link = document.createElement('a');
       link.href = analyzedItem.thumbnail;
       link.target = '_blank';
@@ -134,120 +169,179 @@ export const HomeView: React.FC<HomeViewProps> = ({
     return `${mb.toFixed(0)} MB`;
   };
 
+  // Mock platforms from design mockup
+  const quickPlatforms = [
+    { name: 'YouTube', icon: YoutubeSvg, color: '#ef4444', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+    { name: 'SoundCloud', icon: SoundcloudSvg, color: '#f97316', url: 'https://soundcloud.com/retrofuture/synthwave-sunset' },
+    { name: 'Vimeo', icon: VimeoSvg, color: '#06b6d4', url: 'https://vimeo.com/8395230' },
+    { name: 'Twitch', icon: TwitchSvg, color: '#a855f7', url: 'https://twitch.tv/ninja/clip/direct' },
+    { name: 'TikTok', icon: TiktokSvg, color: '#ff0050', url: 'https://tiktok.com/@creator/video/direct' },
+    { name: 'RSS', icon: RssSvg, color: '#3b82f6', url: 'https://feeds.podcast.com/lexicon-ai.xml' },
+  ];
+
   const presets = [
-    {
-      label: 'YouTube Single Video',
-      url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      icon: Youtube,
-      color: '#ef4444'
-    },
-    {
-      label: 'YouTube Playlist (Batch)',
-      url: 'https://www.youtube.com/playlist?list=PL4fGSI1pDJn5n4e05b5f884bf05b5a265',
-      icon: Youtube,
-      color: '#ef4444'
-    },
-    {
-      label: 'SoundCloud Track',
-      url: 'https://soundcloud.com/retrofuture/synthwave-sunset',
-      icon: Music,
-      color: '#f97316'
-    },
-    {
-      label: 'Podcast RSS Feed',
-      url: 'https://feeds.podcast.com/lexicon-ai.xml',
-      icon: Rss,
-      color: '#3b82f6'
-    },
-    {
-      label: 'Direct .MP4 Link',
-      url: 'https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4',
-      icon: Link2,
-      color: '#10b981'
-    }
+    { label: 'YouTube Single Video', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+    { label: 'YouTube Playlist (Batch)', url: 'https://www.youtube.com/playlist?list=PL4fGSI1pDJn5n4e05b5f884bf05b5a265' },
+    { label: 'SoundCloud Track', url: 'https://soundcloud.com/retrofuture/synthwave-sunset' },
+    { label: 'Podcast RSS Feed', url: 'https://feeds.podcast.com/lexicon-ai.xml' }
   ];
 
-  const platforms = [
-    { name: 'YouTube', type: 'Video & Playlists', icon: Youtube, desc: 'Highest available quality, HDR, and audio separations' },
-    { name: 'SoundCloud', type: 'High Quality Audio', icon: Music, desc: 'Lossless FLAC, WAV, and high-rate MP3 streams' },
-    { name: 'Vimeo', type: 'HQ Cinematics', icon: Video, desc: 'Pro cinematic content, up to 4K resolutions' },
-    { name: 'RSS Podcasts', type: 'Audio/Video Feeds', icon: Rss, desc: 'Download entire seasons, episodes, and artwork' },
-  ];
-
-  // Selected quality details for info box
   const selectedQualityDetails = analyzedItem?.qualities.find(q => q.id === selectedQualityId);
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-      {/* Hero Header */}
-      <div className="animate-float" style={{ textAlign: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          padding: '0.4rem 1rem',
-          borderRadius: 'var(--radius-full)',
-          background: 'var(--accent-bg)',
-          color: 'var(--accent)',
-          fontSize: '0.85rem',
-          fontWeight: 600,
-          border: '1px solid var(--accent-border)',
-          marginBottom: '1rem'
-        }}>
-          <Sparkles size={14} />
-          <span>VOTED #1 MEDIA ENGINE PROTOTYPE</span>
+  // If there are no real items in the queue, show the exact mockup items for visual fidelity
+  const renderRecentActivityItems = () => {
+    if (activeQueue.length > 0) {
+      return activeQueue.map((item) => {
+        const progressPercent = Math.round((item.downloadedBytes / item.totalBytes) * 100);
+        return (
+          <div key={item.id} className="glass-card" style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1.25rem',
+            padding: '0.85rem 1.25rem',
+            background: 'var(--glass-bg)',
+            borderRadius: 'var(--radius-md)'
+          }}>
+            <img src={item.thumbnail} alt="" style={{ width: '48px', height: '27px', objectFit: 'cover', borderRadius: '4px' }} />
+            <div style={{ flexGrow: 1, minWidth: '150px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-h)' }}>
+                <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth: '280px' }} title={item.title}>
+                  {item.title}
+                </span>
+                <span>{progressPercent}%</span>
+              </div>
+              <div className="progress-bar-track" style={{ height: '5px', marginTop: '0.35rem' }}>
+                <div 
+                  className={`progress-bar-fill ${item.status === 'downloading' ? 'progress-shimmer-active' : ''}`}
+                  style={{ width: `${progressPercent}%` }}
+                ></div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                <span>{formatSize(item.downloadedBytes)} / {formatSize(item.totalBytes)}</span>
+                {item.status === 'downloading' && <span>{(item.speedBytesPerSec / (1024 * 1024)).toFixed(1)} MB/s</span>}
+                {item.status === 'paused' && <span style={{ color: 'var(--warning)' }}>INTERRUPTED</span>}
+                {item.status === 'completed' && <span style={{ color: 'var(--success)' }}>FINISHED</span>}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '0.25rem' }}>
+              {item.status === 'downloading' ? (
+                <button onClick={() => downloadManager.pauseItem(item.id)} className="btn-icon" style={{ width: '28px', height: '28px' }}><Pause size={12} /></button>
+              ) : item.status === 'paused' ? (
+                <button onClick={() => downloadManager.resumeItem(item.id)} className="btn-icon" style={{ width: '28px', height: '28px' }}><Play size={12} /></button>
+              ) : null}
+              <button onClick={() => downloadManager.cancelItem(item.id)} className="btn-icon" style={{ width: '28px', height: '28px', color: 'var(--danger)' }}><X size={12} /></button>
+            </div>
+          </div>
+        );
+      });
+    }
+
+    // Default mock data matching mockup screens exactly if queue is empty!
+    const mockupActivity = [
+      {
+        title: 'Cyberpunk_2077_Official_Trailer_4K.mp4',
+        progress: 82,
+        sizeText: '4.2 GB of 5.1 GB',
+        speedText: '24.5 MB/s',
+        status: 'downloading',
+        thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&auto=format&fit=crop&q=60'
+      },
+      {
+        title: 'Lex_Fridman_Podcast_Elon_Musk.mp3',
+        progress: 75,
+        sizeText: '158 MB of 210 MB',
+        speedText: 'INTERRUPTED',
+        status: 'paused',
+        thumbnail: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=100&auto=format&fit=crop&q=60'
+      },
+      {
+        title: 'Our_Planet_S02E01_HDR_H265.mkv',
+        progress: 100,
+        sizeText: '12.8 GB',
+        speedText: 'FINISHED 2M AGO',
+        status: 'completed',
+        thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=100&auto=format&fit=crop&q=60'
+      }
+    ];
+
+    return mockupActivity.map((item, idx) => (
+      <div key={idx} className="glass-card" style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1.25rem',
+        padding: '0.85rem 1.25rem',
+        background: 'var(--glass-bg)',
+        borderRadius: 'var(--radius-md)'
+      }}>
+        <img src={item.thumbnail} alt="" style={{ width: '48px', height: '27px', objectFit: 'cover', borderRadius: '4px' }} />
+        <div style={{ flexGrow: 1, minWidth: '150px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-h)' }}>
+            <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth: '280px' }} title={item.title}>
+              {item.title}
+            </span>
+            <span>{item.progress}%</span>
+          </div>
+          <div className="progress-bar-track" style={{ height: '5px', marginTop: '0.35rem' }}>
+            <div 
+              className={`progress-bar-fill ${item.status === 'downloading' ? 'progress-shimmer-active' : ''}`}
+              style={{ width: `${item.progress}%` }}
+            ></div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            <span>{item.sizeText}</span>
+            <span style={{ color: item.status === 'paused' ? 'var(--danger)' : item.status === 'completed' ? 'var(--success)' : 'inherit' }}>
+              {item.speedText}
+            </span>
+          </div>
         </div>
-        <h1 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-1.5px', marginBottom: '0.75rem' }}>
-          Streamline Your <span style={{ background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Downloads</span>
+        <div style={{ display: 'flex', gap: '0.25rem' }}>
+          {item.status === 'downloading' ? (
+            <button onClick={() => alert("Simulated pause")} className="btn-icon" style={{ width: '28px', height: '28px' }}><Pause size={12} /></button>
+          ) : item.status === 'paused' ? (
+            <button onClick={() => alert("Simulated resume")} className="btn-icon" style={{ width: '28px', height: '28px' }}><Play size={12} /></button>
+          ) : null}
+          {item.status === 'completed' ? (
+            <button onClick={() => alert("Simulated folder open")} className="btn-icon" style={{ width: '28px', height: '28px' }}><FolderOpen size={12} /></button>
+          ) : (
+            <button onClick={() => alert("Simulated cancel")} className="btn-icon" style={{ width: '28px', height: '28px', color: 'var(--danger)' }}><X size={12} /></button>
+          )}
+        </div>
+      </div>
+    ));
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      
+      {/* Search Header - Mockup styling */}
+      <div style={{ textAlign: 'center', marginTop: '1.5rem', marginBottom: '1rem' }}>
+        <h1 style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '-1px', marginBottom: '0.5rem', color: 'var(--text-h)' }}>
+          Stream Any Media
         </h1>
-        <p style={{ color: 'var(--text)', fontSize: '1.15rem', maxWidth: '600px', margin: '0 auto' }}>
-          Download video, playlists, sound clips, and audiobooks in pristine quality.
-          Completely organized, fast, and secure.
+        <p style={{ color: 'var(--text)', fontSize: '0.95rem', maxWidth: '550px', margin: '0 auto', lineHeight: '1.5' }}>
+          Input your source URL below. OmniStream analyzes and optimizes your media for the ultimate viewing experience.
         </p>
       </div>
 
       {/* Large Input Paste Box */}
       <div className="glass-card" style={{
-        padding: '2.5rem',
+        padding: '1.5rem 2rem',
         borderRadius: 'var(--radius-lg)',
-        boxShadow: 'var(--shadow-lg)',
-        position: 'relative',
-        overflow: 'hidden'
+        position: 'relative'
       }}>
-        <div style={{
-          position: 'absolute',
-          top: '-50%',
-          left: '-10%',
-          width: '50%',
-          height: '100%',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(0,0,0,0) 70%)',
-          pointerEvents: 'none'
-        }}></div>
-
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Search size={22} color="var(--accent)" />
-          Paste Link to Start
-        </h2>
-
-        <div style={{
-          display: 'flex',
-          gap: '0.75rem',
-          position: 'relative',
-          zIndex: 1
-        }}>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
           <input
             type="text"
             className="input"
-            placeholder="Paste YouTube, SoundCloud, Vimeo, Podcast URL or direct file link here..."
+            placeholder="https://www.youtube.com/watch?v=.."
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
             style={{
               flexGrow: 1,
-              padding: '1.1rem 1.5rem',
-              fontSize: '1.05rem',
-              borderRadius: 'var(--radius-md)',
-              borderWidth: '1.5px'
+              padding: '0.85rem 1.25rem',
+              fontSize: '1rem',
+              borderRadius: 'var(--radius-default)'
             }}
           />
           <button
@@ -255,16 +349,19 @@ export const HomeView: React.FC<HomeViewProps> = ({
             onClick={() => handleAnalyze()}
             disabled={loading}
             style={{
-              padding: '0 2.25rem',
-              fontSize: '1.05rem',
-              minWidth: '150px'
+              padding: '0 2rem',
+              fontSize: '0.95rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: 'var(--accent)'
             }}
           >
             {loading ? (
               <div style={{
-                width: '20px',
-                height: '20px',
-                border: '3px solid rgba(255,255,255,0.3)',
+                width: '16px',
+                height: '16px',
+                border: '2px solid rgba(255,255,255,0.3)',
                 borderTopColor: '#fff',
                 borderRadius: '50%',
                 animation: 'progress-animation 1s linear infinite'
@@ -272,7 +369,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             ) : (
               <>
                 <span>Analyze</span>
-                <ArrowRight size={18} />
+                <Zap size={15} />
               </>
             )}
           </button>
@@ -281,24 +378,23 @@ export const HomeView: React.FC<HomeViewProps> = ({
         {error && (
           <div style={{
             marginTop: '1rem',
-            padding: '0.85rem 1.25rem',
-            borderRadius: 'var(--radius-md)',
+            padding: '0.75rem 1.15rem',
+            borderRadius: 'var(--radius-sm)',
             background: 'var(--danger-bg)',
             color: 'var(--danger)',
-            fontSize: '0.9rem',
-            border: '1px solid rgba(239, 68, 68, 0.25)',
+            fontSize: '0.85rem',
+            border: '1px solid rgba(255, 180, 171, 0.2)',
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem',
-            animation: 'float 0.3s ease'
+            gap: '0.5rem'
           }}>
-            <Info size={16} />
+            <Info size={14} />
             <span>{error}</span>
           </div>
         )}
       </div>
 
-      {/* SINGLE FILE CONFIGURATION CARD CONTAINER */}
+      {/* SINGLE FILE CONFIGURATION CARD */}
       {analyzedItem && analyzedItem.type !== 'playlist' && analyzedItem.type !== 'podcast' && (
         <div className="glass-card animate-float" style={{
           padding: '2rem',
@@ -309,36 +405,17 @@ export const HomeView: React.FC<HomeViewProps> = ({
           flexWrap: 'wrap',
           position: 'relative'
         }}>
-          {/* Close Card Button */}
           <button 
             onClick={onClearAnalyzed}
             className="btn-icon"
-            style={{
-              position: 'absolute',
-              top: '1rem',
-              right: '1rem',
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%'
-            }}
+            style={{ position: 'absolute', top: '1rem', right: '1rem', width: '32px', height: '32px', borderRadius: '50%' }}
             title="Clear analyzed result"
           >
             <X size={16} />
           </button>
 
-          {/* Video / Audio Thumbnail */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'center' }}>
-            <img 
-              src={analyzedItem.thumbnail} 
-              alt="" 
-              style={{
-                width: '240px',
-                height: '135px',
-                objectFit: 'cover',
-                borderRadius: 'var(--radius-md)',
-                boxShadow: 'var(--shadow-lg)'
-              }}
-            />
+            <img src={analyzedItem.thumbnail} alt="" style={{ width: '240px', height: '135px', objectFit: 'cover', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-lg)' }} />
             <button
               onClick={handleDownloadThumbnail}
               disabled={thumbnailDownloadLoading}
@@ -349,7 +426,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </button>
           </div>
 
-          {/* Details / Configurations */}
           <div style={{ flexGrow: 1, minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
@@ -358,17 +434,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   <span className="badge badge-info" style={{ fontSize: '0.65rem' }}>Duration: {analyzedItem.durationString}</span>
                 )}
               </div>
-              <h3 style={{ fontSize: '1.4rem', color: 'var(--text-h)', fontWeight: 800, paddingRight: '2rem' }}>
-                {analyzedItem.title}
-              </h3>
-              {analyzedItem.artist && (
-                <p style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text)', marginTop: '0.15rem' }}>
-                  By {analyzedItem.artist}
-                </p>
-              )}
+              <h3 style={{ fontSize: '1.4rem', color: 'var(--text-h)', fontWeight: 800 }}>{analyzedItem.title}</h3>
+              {analyzedItem.artist && <p style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text)', marginTop: '0.15rem' }}>By {analyzedItem.artist}</p>}
             </div>
 
-            {/* Quality & Format Options Row */}
             <div className="grid-2">
               <div className="input-group">
                 <label className="label">Preferred Quality</label>
@@ -407,12 +476,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </div>
             </div>
 
-            {/* Subtitles Download Toggle List */}
             {analyzedItem.subtitles && analyzedItem.subtitles.length > 0 && (
               <div>
                 <label className="label" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.5rem' }}>
                   <Languages size={15} color="var(--accent)" />
-                  Extract Subtitles (Optional)
+                  Extract Subtitles
                 </label>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {analyzedItem.subtitles.map((sub) => {
@@ -442,16 +510,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </div>
             )}
 
-            {/* Selected Info Summary & Action Box */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderTop: '1px solid var(--border)',
-              paddingTop: '1.25rem',
-              flexWrap: 'wrap',
-              gap: '1rem'
-            }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border)', paddingTop: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                 {selectedQualityDetails && (
                   <div>
@@ -459,86 +518,104 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   </div>
                 )}
               </div>
-
-              <button
-                onClick={handleQueueDownload}
-                className="btn btn-primary"
-                style={{ padding: '0.7rem 1.75rem', fontSize: '0.92rem', display: 'flex', gap: '0.5rem' }}
-              >
+              <button onClick={handleQueueDownload} className="btn btn-primary" style={{ padding: '0.7rem 1.75rem', fontSize: '0.92rem', display: 'flex', gap: '0.5rem' }}>
                 <Download size={16} />
                 <span>Add to Download Queue</span>
               </button>
             </div>
-
           </div>
         </div>
       )}
 
-      {/* Preset Buttons for Easy Demo Testing */}
+      {/* Quick Platforms (Matches Mockup) */}
       <div>
-        <h3 style={{ fontSize: '1.1rem', color: 'var(--text-h)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-          Quick Demo Presets (Click to test instantly)
-        </h3>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-          {presets.map((preset, index) => {
-            const Icon = preset.icon;
-            return (
-              <button
-                key={index}
-                onClick={() => handlePresetClick(preset.url)}
-                className="btn btn-secondary"
-                disabled={loading}
-                style={{
-                  padding: '0.6rem 1rem',
-                  fontSize: '0.85rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  borderRadius: 'var(--radius-md)'
-                }}
-              >
-                <Icon size={16} style={{ color: preset.color }} />
-                <span>{preset.label}</span>
-              </button>
-            );
-          })}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '1.15rem', color: 'var(--text-h)', fontWeight: 600 }}>Quick Platforms</h3>
+          <span 
+            onClick={() => alert("Platform lists details available in settings.")}
+            style={{ fontSize: '0.85rem', color: 'var(--text-muted)', cursor: 'pointer' }}
+          >
+            View All
+          </span>
         </div>
-      </div>
-
-      {/* Grid of Platforms */}
-      <div>
-        <h3 style={{ fontSize: '1.25rem', color: 'var(--text-h)', marginBottom: '1.25rem' }}>
-          Supported Media Providers
-        </h3>
-        <div className="grid-2">
-          {platforms.map((platform, idx) => {
+        
+        <div className="grid-3" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          {quickPlatforms.map((platform, idx) => {
             const Icon = platform.icon;
             return (
-              <div key={idx} className="glass-card" style={{
-                display: 'flex',
-                gap: '1.25rem',
-                alignItems: 'flex-start',
-                padding: '1.5rem',
-                borderRadius: 'var(--radius-md)'
-              }}>
+              <div 
+                key={idx} 
+                className="glass-card" 
+                onClick={() => handlePresetClick(platform.url)}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.75rem',
+                  padding: '1.5rem',
+                  borderRadius: 'var(--radius-lg)',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  background: 'var(--glass-bg)',
+                  borderColor: 'var(--glass-border)'
+                }}
+              >
                 <div style={{
-                  background: 'var(--accent-bg)',
-                  padding: '0.85rem',
-                  borderRadius: 'var(--radius-md)',
-                  color: 'var(--accent)'
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: platform.color,
+                  boxShadow: 'inset 0 0 10px rgba(255,255,255,0.02)'
                 }}>
-                  <Icon size={28} />
+                  <Icon />
                 </div>
-                <div>
-                  <h4 style={{ fontSize: '1.1rem', color: 'var(--text-h)', marginBottom: '0.25rem' }}>{platform.name}</h4>
-                  <span className="badge badge-accent" style={{ marginBottom: '0.5rem', fontSize: '0.65rem' }}>{platform.type}</span>
-                  <p style={{ fontSize: '0.88rem', color: 'var(--text)', lineHeight: '1.4' }}>{platform.desc}</p>
-                </div>
+                <h4 style={{ fontSize: '0.98rem', fontWeight: 600, color: 'var(--text-h)' }}>{platform.name}</h4>
               </div>
             );
           })}
         </div>
       </div>
+
+      {/* Recent Activity (Matches Mockup) */}
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '1.15rem', color: 'var(--text-h)', fontWeight: 600 }}>Recent Activity</h3>
+          {activeQueue.length > 0 && (
+            <span className="badge badge-accent" style={{ fontSize: '0.65rem' }}>
+              {activeQueue.filter(q => q.status === 'downloading').length} Active Tasks
+            </span>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {renderRecentActivityItems()}
+        </div>
+      </div>
+
+      {/* Preset Demo Options for user review */}
+      <div>
+        <h3 style={{ fontSize: '1rem', color: 'var(--text-h)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          Debug Preset Toggles
+        </h3>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          {presets.map((preset, idx) => (
+            <button
+              key={idx}
+              onClick={() => handlePresetClick(preset.url)}
+              className="btn btn-secondary"
+              style={{ padding: '0.5rem 0.85rem', fontSize: '0.8rem' }}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
     </div>
   );
 };

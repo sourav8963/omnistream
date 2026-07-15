@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { 
   Save, 
   Check, 
-  Folder, 
   Sliders, 
   Server
 } from 'lucide-react';
@@ -44,10 +43,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '800px' }}>
       
-      {/* Page Header */}
+      {/* Page Header - Matches Mockup */}
       <div>
-        <h2 style={{ fontSize: '1.5rem', color: 'var(--text-h)', marginBottom: '0.35rem' }}>Preferences & Configuration</h2>
-        <p style={{ color: 'var(--text)', fontSize: '0.9rem' }}>Customize your media separation engine, quality defaults, folder paths, and thread counts.</p>
+        <h1 style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--text-h)', marginBottom: '0.35rem' }}>Settings</h1>
+        <p style={{ color: 'var(--text)', fontSize: '0.92rem' }}>Customize your media separation engine, quality defaults, folder paths, and thread counts.</p>
       </div>
 
       <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', padding: '2rem' }}>
@@ -55,23 +54,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
         {/* Subtitle section */}
         <h3 style={{ fontSize: '1.15rem', color: 'var(--text-h)', borderBottom: '1px solid var(--border)', paddingBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Sliders size={18} color="var(--accent)" />
-          Application Settings
+          General Settings
         </h3>
 
-        {/* Theme Settings */}
+        {/* Concurrency and Format Settings */}
         <div className="grid-2">
-          <div className="input-group">
-            <label className="label">UI Display Theme</label>
-            <select 
-              className="input"
-              value={settings.theme}
-              onChange={(e) => handleUpdateField('theme', e.target.value)}
-            >
-              <option value="dark">Dark Theme (Obsidian)</option>
-              <option value="light">Light Theme (Minimalist)</option>
-            </select>
-          </div>
-
           {/* Max Concurrent Downloads */}
           <div className="input-group">
             <label className="label">Max Parallel Downloads (Threads)</label>
@@ -85,6 +72,21 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
               <option value="3">3 Threads (Recommended)</option>
               <option value="5">5 Threads (High Bandwidth)</option>
               <option value="10">10 Threads (Aggressive)</option>
+            </select>
+          </div>
+
+          <div className="input-group">
+            <label className="label">Default Container Format</label>
+            <select 
+              className="input"
+              value={settings.defaultFormat}
+              onChange={(e) => handleUpdateField('defaultFormat', e.target.value)}
+            >
+              <option value="mp4">MP4 (Video Container)</option>
+              <option value="mkv">MKV (Video Container)</option>
+              <option value="webm">WEBM (Video Container)</option>
+              <option value="mp3">MP3 (Audio Codec)</option>
+              <option value="flac">FLAC (Audio Lossless)</option>
             </select>
           </div>
         </div>
@@ -123,7 +125,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
 
         {/* Output Path Folder */}
         <div className="input-group">
-          <label className="label">Default Downloads Directory</label>
+          <label className="label">Download Directory</label>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <input 
               type="text" 
@@ -134,58 +136,82 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
             />
             <button 
               className="btn btn-secondary" 
-              style={{ padding: '0 1rem' }}
-              onClick={() => alert("Directory picker requires native desktop integrations (Phase 2). Path updated manually.")}
+              style={{ padding: '0 1.5rem', borderRadius: 'var(--radius-default)' }}
+              onClick={() => alert("Directory browser requires desktop wrappers (Phase 2). Path updated manually.")}
             >
-              <Folder size={16} />
               Browse
             </button>
           </div>
         </div>
 
         {/* Bandwidth Limiter */}
-        <div className="grid-2">
-          <div className="input-group">
-            <label className="label">Bandwidth Cap Limit (Speed Limit)</label>
-            <select 
-              className="input"
-              value={settings.speedLimit}
-              onChange={(e) => handleUpdateField('speedLimit', parseInt(e.target.value))}
-            >
-              {speedLimits.map((limit) => (
-                <option key={limit.value} value={limit.value}>
-                  {limit.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className="input-group">
+          <label className="label">Bandwidth Cap Limit (Speed Limit)</label>
+          <select 
+            className="input"
+            value={settings.speedLimit}
+            onChange={(e) => handleUpdateField('speedLimit', parseInt(e.target.value))}
+          >
+            {speedLimits.map((limit) => (
+              <option key={limit.value} value={limit.value}>
+                {limit.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
+        {/* Appearance Settings - Matches Mockup exactly */}
+        <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem', marginTop: '0.5rem' }}>
+          <h3 style={{ fontSize: '1.15rem', color: 'var(--text-h)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            Appearance
+          </h3>
           <div className="input-group">
-            <label className="label">Default Container Format</label>
-            <select 
-              className="input"
-              value={settings.defaultFormat}
-              onChange={(e) => handleUpdateField('defaultFormat', e.target.value)}
-            >
-              <option value="mp4">MP4 (Video Container)</option>
-              <option value="mkv">MKV (Video Container)</option>
-              <option value="mp3">MP3 (Audio Codec)</option>
-              <option value="m4a">M4A (Audio Codec)</option>
-            </select>
+            <label className="label" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>Theme</label>
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              {[
+                { id: 'dark', label: 'Crimson Noir' },
+                { id: 'dark-classic', label: 'Dark Mode' },
+                { id: 'light', label: 'Light Mode' }
+              ].map((themeOpt) => {
+                const isActive = settings.theme === themeOpt.id;
+                return (
+                  <button
+                    key={themeOpt.id}
+                    type="button"
+                    onClick={() => handleUpdateField('theme', themeOpt.id)}
+                    style={{
+                      flexGrow: 1,
+                      padding: '0.85rem 1.5rem',
+                      borderRadius: 'var(--radius-default)',
+                      border: '1px solid',
+                      borderColor: isActive ? 'var(--accent)' : 'var(--glass-border)',
+                      background: isActive ? 'var(--accent-bg)' : 'var(--glass-bg)',
+                      color: isActive ? 'var(--text-h)' : 'var(--text)',
+                      fontWeight: 650,
+                      cursor: 'pointer',
+                      boxShadow: isActive ? 'var(--shadow-glow)' : 'none',
+                      transition: 'all var(--transition-normal)'
+                    }}
+                  >
+                    {themeOpt.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* Mock API Integration details */}
         <div className="glass-card" style={{
           background: 'var(--info-bg)',
-          borderColor: 'rgba(59, 130, 246, 0.2)',
+          borderColor: 'var(--accent-border)',
           borderRadius: 'var(--radius-md)',
           padding: '1rem',
           display: 'flex',
           gap: '0.75rem',
           alignItems: 'flex-start'
         }}>
-          <Server size={18} color="var(--info)" style={{ flexShrink: 0, marginTop: '0.15rem' }} />
+          <Server size={18} color="var(--accent)" style={{ flexShrink: 0, marginTop: '0.15rem' }} />
           <div>
             <h4 style={{ color: 'var(--text-h)', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>Engine API Integrations</h4>
             <p style={{ fontSize: '0.8rem', color: 'var(--text)', lineHeight: '1.4' }}>
@@ -223,7 +249,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
               background: 'var(--success-bg)',
               padding: '0.4rem 1rem',
               borderRadius: 'var(--radius-sm)',
-              border: '1px solid rgba(16, 185, 129, 0.2)'
+              border: '1px solid rgba(78, 222, 163, 0.2)'
             }}>
               <Check size={16} />
               Settings Saved Successfully

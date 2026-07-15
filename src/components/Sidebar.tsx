@@ -5,9 +5,10 @@ import {
   DownloadCloud, 
   History, 
   Settings, 
-  Moon, 
-  Sun,
-  Activity
+  Activity,
+  HelpCircle,
+  LogOut,
+  Plus
 } from 'lucide-react';
 import { downloadManager } from '../services/downloadManager';
 
@@ -15,16 +16,12 @@ interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   playlistAnalyzed: boolean;
-  theme: 'dark' | 'light';
-  toggleTheme: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   setActiveTab,
   playlistAnalyzed,
-  theme,
-  toggleTheme,
 }) => {
   const [activeCount, setActiveCount] = useState(0);
   const [totalSpeed, setTotalSpeed] = useState(0);
@@ -61,13 +58,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'home', label: 'Home', icon: Home },
     ...(playlistAnalyzed ? [{ id: 'playlist', label: 'Playlist Preview', icon: ListMusic }] : []),
     { id: 'queue', label: 'Download Manager', icon: DownloadCloud, badge: activeCount > 0 ? activeCount : undefined },
-    { id: 'history', label: 'History & Favorites', icon: History },
+    { id: 'history', label: 'History', icon: History },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   return (
     <aside className="sidebar">
-      {/* Brand Logo */}
+      {/* Brand Logo - Matches Mockup */}
       <div className="sidebar-brand" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2.5rem' }}>
         <div style={{
           background: 'var(--accent-gradient)',
@@ -77,16 +74,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: 'var(--shadow-glow)'
+          boxShadow: 'var(--shadow-glow)',
+          color: '#ffffff'
         }}>
-          <Activity size={24} color="#fff" />
+          <Activity size={24} />
         </div>
         <div>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.5px', margin: 0 }}>
-            Omni<span style={{ color: 'var(--accent)' }}>Stream</span>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 850, letterSpacing: '-0.5px', margin: 0, color: 'var(--text-h)' }}>
+            OmniStream
           </h2>
-          <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Media Engine
+          <span style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
+            MEDIA COMMAND CENTER
           </span>
         </div>
       </div>
@@ -106,20 +104,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 gap: '1rem',
                 padding: '0.85rem 1.25rem',
                 borderRadius: 'var(--radius-md)',
-                background: isActive ? 'var(--accent-bg)' : 'transparent',
+                background: isActive ? 'var(--glass-bg)' : 'transparent',
                 border: '1px solid transparent',
-                borderColor: isActive ? 'var(--accent-border)' : 'transparent',
-                color: isActive ? 'var(--accent)' : 'var(--text)',
+                borderColor: isActive ? 'var(--glass-border)' : 'transparent',
+                color: isActive ? 'var(--text-h)' : 'var(--text)',
                 cursor: 'pointer',
                 fontWeight: isActive ? 600 : 500,
                 textAlign: 'left',
                 width: '100%',
                 transition: 'all var(--transition-fast)',
-                position: 'relative'
+                position: 'relative',
+                boxShadow: isActive ? 'inset 0 0 12px rgba(255, 255, 255, 0.03)' : 'none'
               }}
               className="sidebar-btn"
             >
-              <Icon size={20} />
+              <Icon size={20} style={{ color: isActive ? 'var(--accent-light)' : 'currentColor' }} />
               <span style={{ fontSize: '0.95rem' }}>{item.label}</span>
               {item.badge !== undefined && (
                 <span style={{
@@ -134,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 2px 8px rgba(139, 92, 246, 0.3)'
+                  boxShadow: 'var(--shadow-glow)'
                 }}>
                   {item.badge}
                 </span>
@@ -142,10 +141,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           );
         })}
+
+        {/* New Download Button (Matches Mockup) */}
+        <button
+          onClick={() => {
+            setActiveTab('home');
+            setTimeout(() => {
+              const inputEl = document.querySelector('.input') as HTMLInputElement;
+              if (inputEl) inputEl.focus();
+            }, 100);
+          }}
+          className="btn btn-primary"
+          style={{
+            marginTop: '2rem',
+            width: '100%',
+            padding: '0.85rem 1.25rem',
+            borderRadius: 'var(--radius-md)',
+            boxShadow: 'var(--shadow-glow)',
+            fontSize: '0.95rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          <Plus size={18} />
+          <span>New Download</span>
+        </button>
       </nav>
 
-      {/* Speed Monitor Panel & Theme Toggle at bottom */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
+      {/* Stats monitor and Bottom links (Help / Logout) */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
         {activeCount > 0 && (
           <div className="glass-card" style={{
             padding: '1rem',
@@ -156,29 +184,58 @@ export const Sidebar: React.FC<SidebarProps> = ({
             flexDirection: 'column',
             gap: '0.35rem'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)', fontWeight: 600, fontSize: '0.8rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-light)', fontWeight: 600, fontSize: '0.8rem' }}>
               <DownloadCloud size={16} className="animate-pulse-glow" />
               <span>DOWNLOADING NOW</span>
             </div>
             <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-h)' }}>
               {formatSpeed(totalSpeed)}
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text)' }}>
-              Speed capped at {activeCount} active stream{activeCount > 1 ? 's' : ''}
-            </div>
           </div>
         )}
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>
-            Theme: {theme === 'dark' ? 'Dark' : 'Light'}
-          </span>
-          <button 
-            onClick={toggleTheme}
-            className="btn-icon"
-            aria-label="Toggle Theme"
+        {/* Help & Logout Buttons */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <button
+            onClick={() => alert("OmniStream Help & Documentation Center is offline for MVP.")}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.85rem',
+              padding: '0.5rem 0.75rem',
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--text)',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              textAlign: 'left',
+              transition: 'color var(--transition-fast)'
+            }}
+            className="sidebar-bottom-btn"
           >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            <HelpCircle size={18} color="var(--text-muted)" />
+            <span>Help</span>
+          </button>
+          
+          <button
+            onClick={() => alert("Logout routine initialized.")}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.85rem',
+              padding: '0.5rem 0.75rem',
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--text)',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              textAlign: 'left',
+              transition: 'color var(--transition-fast)'
+            }}
+            className="sidebar-bottom-btn"
+          >
+            <LogOut size={18} color="var(--text-muted)" />
+            <span>Logout</span>
           </button>
         </div>
       </div>

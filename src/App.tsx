@@ -16,34 +16,16 @@ function App() {
   // Apply theme class when settings or theme updates
   useEffect(() => {
     const root = document.documentElement;
-    if (settings.theme === 'dark') {
-      root.setAttribute('data-theme', 'dark');
-      root.classList.add('dark-theme');
-    } else if (settings.theme === 'light') {
-      root.setAttribute('data-theme', 'light');
+    root.setAttribute('data-theme', settings.theme);
+    if (settings.theme === 'light') {
       root.classList.remove('dark-theme');
     } else {
-      // System choice
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (prefersDark) {
-        root.setAttribute('data-theme', 'dark');
-        root.classList.add('dark-theme');
-      } else {
-        root.setAttribute('data-theme', 'light');
-        root.classList.remove('dark-theme');
-      }
+      root.classList.add('dark-theme');
     }
   }, [settings.theme]);
 
   const handleSettingsChange = (newSettings: Settings) => {
     setSettings(newSettings);
-  };
-
-  const toggleTheme = () => {
-    const nextTheme: 'dark' | 'light' = settings.theme === 'dark' ? 'light' : 'dark';
-    const updated: Settings = { ...settings, theme: nextTheme };
-    storage.saveSettings(updated);
-    setSettings(updated);
   };
 
   const handleAnalyzeSuccess = (result: AnalysisResult) => {
@@ -117,8 +99,6 @@ function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         playlistAnalyzed={isPlaylistAnalyzed}
-        theme={settings.theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : settings.theme}
-        toggleTheme={toggleTheme}
       />
 
       {/* Main Content Dashboard */}

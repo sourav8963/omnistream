@@ -16,27 +16,27 @@
   --transition-normal: 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* 400ms transition for buttons */
   --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* OmniStream Aura Night Colors */
-  --bg: #0b1326;
-  --sidebar-bg: rgba(19, 27, 46, 0.7);
-  --card-bg: rgba(23, 31, 51, 0.5); /* 50% opacity */
-  --glass-bg: rgba(34, 42, 61, 0.35);
-  --glass-border: rgba(255, 255, 255, 0.1); /* 10% white opacity */
+  /* OmniStream Crimson Noir Colors */
+  --bg: #070104;
+  --sidebar-bg: rgba(16, 2, 8, 0.75);
+  --card-bg: rgba(22, 3, 11, 0.5); /* 50% opacity */
+  --glass-bg: rgba(32, 4, 15, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.08); /* 8% white opacity */
   
   --text: #c2c6d6; /* on-surface-variant */
   --text-muted: #8c909f; /* outline */
   --text-h: #dae2fd; /* on-surface */
   
-  --accent: #adc6ff; /* primary Electric Blue */
-  --accent-light: #d0bcff; /* secondary Neon Purple */
-  --accent-gradient: linear-gradient(135deg, #adc6ff 0%, #d0bcff 100%);
-  --accent-bg: rgba(173, 198, 255, 0.08);
-  --accent-border: rgba(173, 198, 255, 0.2);
+  --accent: #c90035; /* Crimson Red */
+  --accent-light: #e63960;
+  --accent-gradient: linear-gradient(135deg, #c90035 0%, #7e0020 100%);
+  --accent-bg: rgba(201, 0, 53, 0.08);
+  --accent-border: rgba(201, 0, 53, 0.25);
 
   --border: rgba(255, 255, 255, 0.08);
-  --input-bg: rgba(6, 14, 32, 0.4); /* darker 20% opacity */
-  --input-border: rgba(255, 255, 255, 0.1);
-  --input-focus: #adc6ff;
+  --input-bg: rgba(12, 1, 5, 0.5); /* 20% opacity matching mockup */
+  --input-border: rgba(255, 255, 255, 0.08);
+  --input-focus: #c90035;
 
   --success: #4edea3; /* tertiary Emerald */
   --success-bg: rgba(78, 222, 163, 0.08);
@@ -44,12 +44,12 @@
   --warning-bg: rgba(251, 191, 36, 0.08);
   --danger: #ffb4ab; /* error */
   --danger-bg: rgba(255, 180, 171, 0.08);
-  --info: #adc6ff;
-  --info-bg: rgba(173, 198, 255, 0.08);
+  --info: #c90035;
+  --info-bg: rgba(201, 0, 53, 0.08);
 
-  --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 25px rgba(173, 198, 255, 0.15);
+  --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 25px rgba(201, 0, 53, 0.15);
   
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -57,28 +57,58 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Light theme overrides (can support if explicitly toggled, but Aura system defines dark bases) */
+/* Light theme overrides */
 [data-theme='light'] {
-  --bg: #131b2e; /* Aura uses darker/nocturnal strategy, but we can make light mode slightly brighter slate */
-  --sidebar-bg: rgba(23, 31, 51, 0.85);
-  --card-bg: rgba(34, 42, 61, 0.6);
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.12);
+  --bg: #f8fafc;
+  --sidebar-bg: rgba(241, 245, 249, 0.85);
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg: rgba(241, 245, 249, 0.5);
+  --glass-border: rgba(0, 0, 0, 0.08);
 
-  --text: #dae2fd;
+  --text: #334155;
+  --text-muted: #64748b;
+  --text-h: #0f172a;
+
+  --accent: #c90035;
+  --accent-light: #e63960;
+  --accent-gradient: linear-gradient(135deg, #c90035 0%, #7e0020 100%);
+  --accent-bg: rgba(201, 0, 53, 0.06);
+  --accent-border: rgba(201, 0, 53, 0.15);
+
+  --border: rgba(0, 0, 0, 0.08);
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-border: rgba(0, 0, 0, 0.1);
+  --input-focus: #c90035;
+
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  --shadow-glow: 0 0 15px rgba(201, 0, 53, 0.08);
+}
+
+/* Classic Dark theme overrides */
+[data-theme='dark-classic'] {
+  --bg: #0b1326;
+  --sidebar-bg: rgba(19, 27, 46, 0.85);
+  --card-bg: rgba(23, 31, 51, 0.6);
+  --glass-bg: rgba(34, 42, 61, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.1);
+
+  --text: #c2c6d6;
   --text-muted: #8c909f;
-  --text-h: #ffffff;
+  --text-h: #dae2fd;
 
   --accent: #adc6ff;
   --accent-light: #d0bcff;
   --accent-gradient: linear-gradient(135deg, #adc6ff 0%, #d0bcff 100%);
-  --accent-bg: rgba(173, 198, 255, 0.12);
-  --accent-border: rgba(173, 198, 255, 0.25);
+  --accent-bg: rgba(173, 198, 255, 0.1);
+  --accent-border: rgba(173, 198, 255, 0.2);
 
-  --border: rgba(255, 255, 255, 0.1);
-  --input-bg: rgba(11, 19, 38, 0.5);
-  --input-border: rgba(255, 255, 255, 0.12);
+  --border: rgba(255, 255, 255, 0.08);
+  --input-bg: rgba(6, 14, 32, 0.5);
+  --input-border: rgba(255, 255, 255, 0.1);
   --input-focus: #adc6ff;
+  
+  --shadow-glow: 0 0 25px rgba(173, 198, 255, 0.15);
 }
 
 * {
@@ -90,10 +120,16 @@
 body {
   font-family: 'Geist', var(--font-sans);
   background-color: var(--bg);
+  background-image: radial-gradient(circle at top right, #1d030c 0%, #070104 70%); /* Premium wine glow background */
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
   transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+[data-theme='light'] body,
+[data-theme='dark-classic'] body {
+  background-image: none; /* disable wine glow for other themes */
 }
 
 /* Glassmorphism scrollbar */
@@ -122,16 +158,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 40px;
+  line-height: 44px;
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 600;
-  line-height: 32px;
+  line-height: 34px;
 }
 
 /* Premium Layout Wrapper */
@@ -166,7 +202,7 @@ h2 {
   padding: 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; /* Base Stack Gap 12px-24px */
+  gap: 1.5rem; /* Stack gap */
   max-width: calc(100% - 280px);
 }
 
@@ -185,7 +221,7 @@ h2 {
 .glass-card:hover {
   transform: translateY(-4px) scale(1.01); /* lift effect */
   box-shadow: var(--shadow-lg);
-  border-color: rgba(255, 255, 255, 0.3); /* border opacity 30% */
+  border-color: rgba(255, 255, 255, 0.25); /* border opacity 30% */
   backdrop-filter: blur(30px); /* blur intensifies */
 }
 
@@ -206,16 +242,16 @@ h2 {
   white-space: nowrap;
 }
 
-/* Primary Button: Solid Electric Blue fill, dark blue text (#002e6a) */
+/* Primary Button: Solid Crimson Red fill with white text */
 .btn-primary {
   background-color: var(--accent);
-  color: #002e6a;
+  color: #ffffff;
   font-weight: 700;
 }
 
 .btn-primary:hover {
-  background-color: #c4d7ff; /* slightly brighter blue */
-  box-shadow: 0 0 15px rgba(173, 198, 255, 0.35);
+  background-color: var(--accent-light);
+  box-shadow: 0 0 15px rgba(201, 0, 53, 0.35);
 }
 
 /* Secondary Button: Glass style (translucent bg, 1px border) */
@@ -227,8 +263,8 @@ h2 {
 
 .btn-secondary:hover {
   background-color: var(--accent-bg);
-  border-color: rgba(255, 255, 255, 0.35); /* increases border brightness */
-  color: var(--accent);
+  border-color: rgba(255, 255, 255, 0.3); /* increases border brightness */
+  color: var(--accent-light);
 }
 
 .btn-icon {
@@ -248,8 +284,8 @@ h2 {
 
 .btn-icon:hover {
   background-color: var(--accent-bg);
-  border-color: rgba(255, 255, 255, 0.35);
-  color: var(--accent);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--accent-light);
 }
 
 /* Badges: outlined and pill-shaped */
@@ -302,7 +338,7 @@ h2 {
 
 .input:focus {
   border-color: var(--input-focus);
-  box-shadow: 0 0 0 4px rgba(173, 198, 255, 0.2); /* 4px glow spread */
+  box-shadow: 0 0 0 4px rgba(201, 0, 53, 0.2); /* 4px glow spread */
 }
 
 /* Keyframes for Shimmer Progress Bar Animation */
@@ -347,7 +383,7 @@ h2 {
 .progress-bar-fill {
   height: 100%;
   border-radius: var(--radius-full);
-  background: var(--accent-gradient); /* gradient from Electric Blue to Neon Purple */
+  background: var(--accent-gradient); /* gradient from Crimson to Dark Crimson */
   transition: width 0.3s ease;
   position: relative;
 }
