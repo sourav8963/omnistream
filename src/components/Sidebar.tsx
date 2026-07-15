@@ -5,7 +5,7 @@ import {
   DownloadCloud, 
   History, 
   Settings, 
-  Activity,
+  Radio,
   HelpCircle,
   LogOut,
   Plus
@@ -77,7 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           boxShadow: 'var(--shadow-glow)',
           color: '#ffffff'
         }}>
-          <Activity size={24} />
+          <Radio size={24} />
         </div>
         <div>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 850, letterSpacing: '-0.5px', margin: 0, color: 'var(--text-h)' }}>
