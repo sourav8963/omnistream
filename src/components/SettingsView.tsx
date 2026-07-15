@@ -24,7 +24,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
     }, 2500);
   };
 
-  const handleUpdateField = (key: keyof Settings, value: any) => {
+  const handleUpdateField = <K extends keyof Settings>(key: K, value: Settings[K]) => {
     setSettings(prev => ({
       ...prev,
       [key]: value
@@ -168,11 +168,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
           <div className="input-group">
             <label className="label" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>Theme</label>
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              {[
+              {([
                 { id: 'dark', label: 'Crimson Noir' },
                 { id: 'dark-classic', label: 'Dark Mode' },
                 { id: 'light', label: 'Light Mode' }
-              ].map((themeOpt) => {
+              ] as const).map((themeOpt) => {
                 const isActive = settings.theme === themeOpt.id;
                 return (
                   <button

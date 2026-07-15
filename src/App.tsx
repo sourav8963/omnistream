@@ -44,8 +44,9 @@ function App() {
       if (result.type === 'playlist' || result.type === 'podcast') {
         setActiveTab('playlist');
       }
-    } catch (err: any) {
-      alert(err.message || 'Failed to re-load playlist.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to re-load playlist.';
+      alert(message);
     }
   };
 

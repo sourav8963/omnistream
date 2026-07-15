@@ -5,11 +5,7 @@ import {
   DownloadCloud, 
   History, 
   Settings, 
-<<<<<<< Updated upstream:src/components/Sidebar.tsx
-  Radio,
-=======
   Activity,
->>>>>>> Stashed changes:omnistream/src/components/Sidebar.tsx
   HelpCircle,
   LogOut,
   Plus
@@ -81,11 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           boxShadow: 'var(--shadow-glow)',
           color: '#ffffff'
         }}>
-<<<<<<< Updated upstream:src/components/Sidebar.tsx
-          <Radio size={24} />
-=======
           <Activity size={24} />
->>>>>>> Stashed changes:omnistream/src/components/Sidebar.tsx
         </div>
         <div>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 850, letterSpacing: '-0.5px', margin: 0, color: 'var(--text-h)' }}>

@@ -24,7 +24,7 @@ type SpeedListener = (speedSec: number) => void;
 let queue: QueueItem[] = [];
 const listeners = new Set<QueueListener>();
 const speedListeners = new Set<SpeedListener>();
-let intervalId: any = null;
+let intervalId: ReturnType<typeof setInterval> | null = null;
 
 // Store historical speeds for the graph (last 30 ticks)
 let speedHistory: number[] = Array(30).fill(0);

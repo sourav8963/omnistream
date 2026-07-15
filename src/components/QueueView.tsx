@@ -119,19 +119,19 @@ export const QueueView: React.FC = () => {
         <div>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.35rem', fontWeight: 500 }}>Total Speed</span>
           <strong style={{ fontSize: '1.85rem', color: 'var(--text-h)', fontWeight: 800 }}>
-            {activeCount > 0 ? formatSpeed(speedHistory[speedHistory.length - 1] || 0) : '85.4 MB/s'}
+            {formatSpeed(speedHistory[speedHistory.length - 1] || 0)}
           </strong>
         </div>
         <div style={{ borderLeft: '1px solid var(--border)', borderRight: '1px solid var(--border)' }}>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.35rem', fontWeight: 500 }}>Active Tasks</span>
           <strong style={{ fontSize: '1.85rem', color: 'var(--text-h)', fontWeight: 800 }}>
-            {activeCount + waitingCount > 0 ? (activeCount + waitingCount) : 3}
+            {activeCount + waitingCount}
           </strong>
         </div>
         <div>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.35rem', fontWeight: 500 }}>Completed</span>
           <strong style={{ fontSize: '1.85rem', color: 'var(--text-h)', fontWeight: 800 }}>
-            {completedCount + 156}
+            {completedCount}
           </strong>
         </div>
       </div>

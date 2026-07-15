@@ -109,8 +109,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
       } else {
         setActiveTab('playlist');
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to analyze URL.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to analyze URL.');
     } finally {
       setLoading(false);
     }

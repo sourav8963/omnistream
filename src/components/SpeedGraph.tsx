@@ -10,11 +10,14 @@ export const SpeedGraph: React.FC<SpeedGraphProps> = ({ speedHistory }) => {
   const height = 110;
   const padding = 5;
 
-  const maxSpeed = Math.max(...speedHistory, 5 * 1024 * 1024); // at least 5MB/s scale
+  const maxSpeed = speedHistory.length > 0
+    ? Math.max(...speedHistory, 5 * 1024 * 1024)
+    : 5 * 1024 * 1024; // at least 5MB/s scale
 
   const points = speedHistory.map((speed, index) => {
-    // Distribute X points evenly across width
-    const x = padding + (index / (speedHistory.length - 1)) * (width - padding * 2);
+    // Distribute X points evenly across width, guard against single-point division by zero
+    const denominator = speedHistory.length > 1 ? speedHistory.length - 1 : 1;
+    const x = padding + (index / denominator) * (width - padding * 2);
     // Y represents speed, inverted (0 speed is at the bottom: height - padding)
     const y = (height - padding) - (speed / maxSpeed) * (height - padding * 2);
     return { x, y };

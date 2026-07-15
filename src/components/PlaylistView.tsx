@@ -101,8 +101,8 @@ export const PlaylistView: React.FC<PlaylistViewProps> = ({
         comparison = a.durationSeconds - b.durationSeconds;
       } else {
         // 'index' / order parsed
-        const idxA = playlist.playlistItems?.indexOf(a) || 0;
-        const idxB = playlist.playlistItems?.indexOf(b) || 0;
+        const idxA = playlist.playlistItems?.indexOf(a) ?? 0;
+        const idxB = playlist.playlistItems?.indexOf(b) ?? 0;
         comparison = idxA - idxB;
       }
       return sortAsc ? comparison : -comparison;
@@ -363,7 +363,7 @@ export const PlaylistView: React.FC<PlaylistViewProps> = ({
                       )}
                     </div>
                     <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-h)' }}>
-                      {(playlist.playlistItems?.indexOf(item) || 0) + 1}
+                      {(playlist.playlistItems?.indexOf(item) ?? 0) + 1}
                     </div>
                     <img 
                       src={item.thumbnail} 

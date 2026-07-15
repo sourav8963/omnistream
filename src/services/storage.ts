@@ -35,7 +35,7 @@ export interface PinnedPlaylist {
 
 const DEFAULT_SETTINGS: Settings = {
   theme: 'dark',
-  defaultFolder: 'C:\\Users\\LORD\\Downloads\\OmniStream',
+  defaultFolder: '~/Downloads/OmniStream',
   defaultVideoQuality: '1080p',
   defaultAudioQuality: '320kbps',
   defaultFormat: 'mp4',
