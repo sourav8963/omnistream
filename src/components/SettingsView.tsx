@@ -160,46 +160,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onSettingsChange }) 
           </select>
         </div>
 
-        {/* Appearance Settings - Matches Mockup exactly */}
-        <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem', marginTop: '0.5rem' }}>
-          <h3 style={{ fontSize: '1.15rem', color: 'var(--text-h)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            Appearance
-          </h3>
-          <div className="input-group">
-            <label className="label" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>Theme</label>
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              {([
-                { id: 'dark', label: 'Crimson Noir' },
-                { id: 'dark-classic', label: 'Dark Mode' },
-                { id: 'light', label: 'Light Mode' }
-              ] as const).map((themeOpt) => {
-                const isActive = settings.theme === themeOpt.id;
-                return (
-                  <button
-                    key={themeOpt.id}
-                    type="button"
-                    onClick={() => handleUpdateField('theme', themeOpt.id)}
-                    style={{
-                      flexGrow: 1,
-                      padding: '0.85rem 1.5rem',
-                      borderRadius: 'var(--radius-default)',
-                      border: '1px solid',
-                      borderColor: isActive ? 'var(--accent)' : 'var(--glass-border)',
-                      background: isActive ? 'var(--accent-bg)' : 'var(--glass-bg)',
-                      color: isActive ? 'var(--text-h)' : 'var(--text)',
-                      fontWeight: 650,
-                      cursor: 'pointer',
-                      boxShadow: isActive ? 'var(--shadow-glow)' : 'none',
-                      transition: 'all var(--transition-normal)'
-                    }}
-                  >
-                    {themeOpt.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
 
         {/* Mock API Integration details */}
         <div className="glass-card" style={{

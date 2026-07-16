@@ -68,6 +68,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Platforms details modal
+  const [showPlatformsModal, setShowPlatformsModal] = useState(false);
+
   // Single file config selections
   const [selectedQualityId, setSelectedQualityId] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('');
@@ -76,6 +79,37 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   // Recent activity list
   const [activeQueue, setActiveQueue] = useState<QueueItem[]>([]);
+  
+  // Interactive mock activities
+  const [mockActivities, setMockActivities] = useState([
+    {
+      id: 'mock-1',
+      title: 'Cyberpunk_2077_Official_Trailer_4K.mp4',
+      progress: 82,
+      sizeText: '4.2 GB of 5.1 GB',
+      speedText: '24.5 MB/s',
+      status: 'downloading' as const,
+      thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&auto=format&fit=crop&q=60'
+    },
+    {
+      id: 'mock-2',
+      title: 'Lex_Fridman_Podcast_Elon_Musk.mp3',
+      progress: 75,
+      sizeText: '158 MB of 210 MB',
+      speedText: 'INTERRUPTED',
+      status: 'paused' as const,
+      thumbnail: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=100&auto=format&fit=crop&q=60'
+    },
+    {
+      id: 'mock-3',
+      title: 'Our_Planet_S02E01_HDR_H265.mkv',
+      progress: 100,
+      sizeText: '12.8 GB',
+      speedText: 'FINISHED 2M AGO',
+      status: 'completed' as const,
+      thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=100&auto=format&fit=crop&q=60'
+    }
+  ]);
 
   useEffect(() => {
     // Monitor the active queue for enqueued items
@@ -236,36 +270,24 @@ export const HomeView: React.FC<HomeViewProps> = ({
       });
     }
 
-    // Default mock data matching mockup screens exactly if queue is empty!
-    const mockupActivity = [
-      {
-        title: 'Cyberpunk_2077_Official_Trailer_4K.mp4',
-        progress: 82,
-        sizeText: '4.2 GB of 5.1 GB',
-        speedText: '24.5 MB/s',
-        status: 'downloading',
-        thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&auto=format&fit=crop&q=60'
-      },
-      {
-        title: 'Lex_Fridman_Podcast_Elon_Musk.mp3',
-        progress: 75,
-        sizeText: '158 MB of 210 MB',
-        speedText: 'INTERRUPTED',
-        status: 'paused',
-        thumbnail: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=100&auto=format&fit=crop&q=60'
-      },
-      {
-        title: 'Our_Planet_S02E01_HDR_H265.mkv',
-        progress: 100,
-        sizeText: '12.8 GB',
-        speedText: 'FINISHED 2M AGO',
-        status: 'completed',
-        thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=100&auto=format&fit=crop&q=60'
-      }
-    ];
+    if (mockActivities.length === 0) {
+      return (
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '1.5rem', 
+          background: 'var(--glass-bg)', 
+          borderRadius: 'var(--radius-md)', 
+          color: 'var(--text-muted)', 
+          fontSize: '0.9rem',
+          border: '1px dashed var(--glass-border)'
+        }}>
+          No recent activity items.
+        </div>
+      );
+    }
 
-    return mockupActivity.map((item, idx) => (
-      <div key={idx} className="glass-card" style={{
+    return mockActivities.map((item) => (
+      <div key={item.id} className="glass-card" style={{
         display: 'flex',
         alignItems: 'center',
         gap: '1.25rem',
@@ -296,14 +318,43 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
         <div style={{ display: 'flex', gap: '0.25rem' }}>
           {item.status === 'downloading' ? (
-            <button onClick={() => alert("Simulated pause")} className="btn-icon" style={{ width: '28px', height: '28px' }}><Pause size={12} /></button>
+            <button 
+              onClick={() => setMockActivities(prev => prev.map(m => m.id === item.id ? { ...m, status: 'paused', speedText: 'INTERRUPTED' } : m))} 
+              className="btn-icon" 
+              style={{ width: '28px', height: '28px' }}
+            >
+              <Pause size={12} />
+            </button>
           ) : item.status === 'paused' ? (
-            <button onClick={() => alert("Simulated resume")} className="btn-icon" style={{ width: '28px', height: '28px' }}><Play size={12} /></button>
+            <button 
+              onClick={() => setMockActivities(prev => prev.map(m => m.id === item.id ? { ...m, status: 'downloading', speedText: '24.5 MB/s' } : m))} 
+              className="btn-icon" 
+              style={{ width: '28px', height: '28px' }}
+            >
+              <Play size={12} />
+            </button>
           ) : null}
           {item.status === 'completed' ? (
-            <button onClick={() => alert("Simulated folder open")} className="btn-icon" style={{ width: '28px', height: '28px' }}><FolderOpen size={12} /></button>
+            <>
+              <button onClick={() => alert("Simulated folder open")} className="btn-icon" style={{ width: '28px', height: '28px' }}><FolderOpen size={12} /></button>
+              <button 
+                onClick={() => setMockActivities(prev => prev.filter(m => m.id !== item.id))} 
+                className="btn-icon" 
+                style={{ width: '28px', height: '28px', color: 'var(--danger)' }}
+                title="Remove activity item"
+              >
+                <X size={12} />
+              </button>
+            </>
           ) : (
-            <button onClick={() => alert("Simulated cancel")} className="btn-icon" style={{ width: '28px', height: '28px', color: 'var(--danger)' }}><X size={12} /></button>
+            <button 
+              onClick={() => setMockActivities(prev => prev.filter(m => m.id !== item.id))} 
+              className="btn-icon" 
+              style={{ width: '28px', height: '28px', color: 'var(--danger)' }}
+              title="Cancel activity item"
+            >
+              <X size={12} />
+            </button>
           )}
         </div>
       </div>
@@ -337,6 +388,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
+            onPaste={(e) => {
+              const pastedText = e.clipboardData.getData('text');
+              if (pastedText) {
+                setUrl(pastedText);
+                handleAnalyze(pastedText);
+              }
+            }}
             style={{
               flexGrow: 1,
               padding: '0.85rem 1.25rem',
@@ -532,7 +590,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <h3 style={{ fontSize: '1.15rem', color: 'var(--text-h)', fontWeight: 600 }}>Quick Platforms</h3>
           <span 
-            onClick={() => alert("Platform lists details available in settings.")}
+            onClick={() => setShowPlatformsModal(true)}
             style={{ fontSize: '0.85rem', color: 'var(--text-muted)', cursor: 'pointer' }}
           >
             View All
@@ -615,6 +673,93 @@ export const HomeView: React.FC<HomeViewProps> = ({
           ))}
         </div>
       </div>
+
+      {/* Supported Platforms Modal */}
+      {showPlatformsModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(0, 0, 0, 0.7)',
+          backdropFilter: 'blur(8px)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem'
+        }}>
+          <div className="glass-card animate-float" style={{
+            width: '100%',
+            maxWidth: '650px',
+            background: 'var(--glass-bg-dense, rgba(20, 10, 15, 0.85))',
+            border: '1px solid var(--accent-border)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '2rem',
+            position: 'relative',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
+          }}>
+            <button 
+              onClick={() => setShowPlatformsModal(false)}
+              className="btn-icon"
+              style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', width: '32px', height: '32px', borderRadius: '50%' }}
+              title="Close modal"
+            >
+              <X size={16} />
+            </button>
+
+            <h2 style={{ fontSize: '1.6rem', color: 'var(--text-h)', fontWeight: 800, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Zap size={22} color="var(--accent)" />
+              All Supported Platforms & Formats
+            </h2>
+            <p style={{ color: 'var(--text)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+              OmniStream supports parsing, separation, and caching for the following media services:
+            </p>
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              maxHeight: '380px',
+              overflowY: 'auto',
+              paddingRight: '0.5rem'
+            }}>
+              {[
+                { name: 'YouTube', type: 'Videos & Playlists', details: 'Supports resolutions up to 8K/4K/1080p, audio separations, and batch playlist queues.' },
+                { name: 'SoundCloud', type: 'Tracks & Playlists', details: 'Extracts lossy or lossless stereo tracks, including high quality (320kbps MP3, AAC, FLAC).' },
+                { name: 'Vimeo', type: 'Single Videos', details: 'Supports full-resolution video streams up to 4K and multi-language closed captions.' },
+                { name: 'Twitch', type: 'Clips & Streams', details: 'Extracts broadcasting clips and game highlights with direct server latency detection.' },
+                { name: 'TikTok', type: 'Short Form Videos', details: 'Directly parses portrait MP4 files and background audio/music components.' },
+                { name: 'Podcast RSS Feeds', type: 'Audio Episodes', details: 'Parses any valid XML podcast feed to display episodes, descriptions, and audio streams.' },
+                { name: 'Direct Links', type: 'Audio & Video files', details: 'Accepts URLs ending with .mp4, .mkv, .mp3, .webm, .flac, .m4a, or containing query tokens.' }
+              ].map((platform, idx) => (
+                <div key={idx} style={{
+                  padding: '1rem',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius-md)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.25rem'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <strong style={{ color: 'var(--text-h)', fontSize: '0.95rem' }}>{platform.name}</strong>
+                    <span className="badge badge-accent" style={{ fontSize: '0.65rem' }}>{platform.type}</span>
+                  </div>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text)', margin: 0, lineHeight: '1.4' }}>{platform.details}</p>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.25rem' }}>
+              <button onClick={() => setShowPlatformsModal(false)} className="btn btn-primary" style={{ padding: '0.5rem 1.5rem', fontSize: '0.9rem' }}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

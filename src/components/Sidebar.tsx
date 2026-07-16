@@ -5,7 +5,6 @@ import {
   DownloadCloud, 
   History, 
   Settings, 
-  Activity,
   HelpCircle,
   LogOut,
   Plus
@@ -77,7 +76,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           boxShadow: 'var(--shadow-glow)',
           color: '#ffffff'
         }}>
-          <Activity size={24} />
+          <svg viewBox="0 0 48 48" width="24" height="24" fill="none">
+            <g transform="translate(12, 12)" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16.247 7.761a6 6 0 0 1 0 8.478"></path>
+              <path d="M19.075 4.933a10 10 0 0 1 0 14.134"></path>
+              <path d="M4.925 19.067a10 10 0 0 1 0-14.134"></path>
+              <path d="M7.753 16.239a6 6 0 0 1 0-8.478"></path>
+              <circle cx="12" cy="12" r="2" fill="currentColor"></circle>
+            </g>
+          </svg>
         </div>
         <div>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 850, letterSpacing: '-0.5px', margin: 0, color: 'var(--text-h)' }}>

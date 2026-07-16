@@ -52,10 +52,15 @@ export const urlAnalyzer = {
           return;
         }
 
+        let urlToCheck = cleanUrl;
+        if (!/^https?:\/\//i.test(cleanUrl)) {
+          urlToCheck = 'https://' + cleanUrl;
+        }
+
         // 1. YouTube Playlist
         if (
-          cleanUrl.includes('youtube.com/playlist') ||
-          cleanUrl.includes('list=')
+          urlToCheck.includes('youtube.com/playlist') ||
+          urlToCheck.includes('list=')
         ) {
           resolve({
             type: 'playlist',
@@ -64,7 +69,7 @@ export const urlAnalyzer = {
             artist: 'Lofi Girl & Friends',
             description: 'The ultimate compilation of mellow beats to code, study, and relax to. Updated daily.',
             thumbnail: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=500&auto=format&fit=crop&q=60',
-            url: cleanUrl,
+            url: urlToCheck,
             itemCount: 8,
             qualities: [],
             playlistItems: [
@@ -161,8 +166,8 @@ export const urlAnalyzer = {
         }
         // 2. YouTube Single Video
         else if (
-          cleanUrl.includes('youtube.com') ||
-          cleanUrl.includes('youtu.be')
+          urlToCheck.includes('youtube.com') ||
+          urlToCheck.includes('youtu.be')
         ) {
           resolve({
             type: 'video',
@@ -173,7 +178,7 @@ export const urlAnalyzer = {
             thumbnail: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=500&auto=format&fit=crop&q=60',
             durationString: '01:54:20',
             durationSeconds: 6860,
-            url: cleanUrl,
+            url: urlToCheck,
             qualities: [
               { id: '2160p', label: '2160p (4K UHD)', sizeBytes: 1450000000, fps: 60, codec: 'VP9', container: 'MKV', isAudioOnly: false },
               { id: '1440p', label: '1440p (QHD)', sizeBytes: 850000000, fps: 60, codec: 'VP9', container: 'MKV', isAudioOnly: false },
@@ -195,7 +200,7 @@ export const urlAnalyzer = {
           });
         }
         // 3. Vimeo
-        else if (cleanUrl.includes('vimeo.com')) {
+        else if (urlToCheck.includes('vimeo.com')) {
           resolve({
             type: 'video',
             platform: 'Vimeo',
@@ -205,11 +210,11 @@ export const urlAnalyzer = {
             thumbnail: 'https://images.unsplash.com/photo-1529963183134-61a90db47eaf?w=500&auto=format&fit=crop&q=60',
             durationString: '04:15',
             durationSeconds: 255,
-            url: cleanUrl,
+            url: urlToCheck,
             qualities: [
-              { id: '2160p', label: '2160p (4K)', sizeBytes: 220000000, fps: 24, codec: 'HEVC', container: 'MP4', isAudioOnly: false },
-              { id: '1080p', label: '1080p (Full HD)', sizeBytes: 85000000, fps: 24, codec: 'H.264', container: 'MP4', isAudioOnly: false },
-              { id: '720p', label: '720p (HD)', sizeBytes: 40000000, fps: 24, codec: 'H.264', container: 'MP4', isAudioOnly: false },
+              { id: '2160p', label: '2160p (4K)', sizeBytes: 22000000, fps: 24, codec: 'HEVC', container: 'MP4', isAudioOnly: false },
+              { id: '1080p', label: '1080p (Full HD)', sizeBytes: 8500000, fps: 24, codec: 'H.264', container: 'MP4', isAudioOnly: false },
+              { id: '720p', label: '720p (HD)', sizeBytes: 4000000, fps: 24, codec: 'H.264', container: 'MP4', isAudioOnly: false },
             ],
             subtitles: [
               { code: 'en', label: 'English' },
@@ -218,7 +223,7 @@ export const urlAnalyzer = {
           });
         }
         // 4. SoundCloud
-        else if (cleanUrl.includes('soundcloud.com')) {
+        else if (urlToCheck.includes('soundcloud.com')) {
           resolve({
             type: 'audio',
             platform: 'SoundCloud',
@@ -228,7 +233,7 @@ export const urlAnalyzer = {
             thumbnail: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=500&auto=format&fit=crop&q=60',
             durationString: '07:45',
             durationSeconds: 465,
-            url: cleanUrl,
+            url: urlToCheck,
             qualities: [
               { id: 'flac', label: 'FLAC (Lossless 24-bit)', sizeBytes: 78000000, codec: 'FLAC', container: 'FLAC', isAudioOnly: true },
               { id: '320kbps', label: 'MP3 (320 kbps High)', sizeBytes: 18600000, codec: 'MP3', container: 'MP3', isAudioOnly: true },
@@ -238,7 +243,7 @@ export const urlAnalyzer = {
           });
         }
         // 5. Podcast RSS Feed
-        else if (cleanUrl.includes('podcast') || cleanUrl.includes('.rss') || cleanUrl.includes('/feed')) {
+        else if (urlToCheck.includes('podcast') || urlToCheck.includes('.rss') || urlToCheck.includes('/feed') || urlToCheck.includes('/rss')) {
           resolve({
             type: 'podcast',
             platform: 'Podcast',
@@ -246,7 +251,7 @@ export const urlAnalyzer = {
             artist: 'Dr. Sarah Vance',
             description: 'Exploring how machine learning, cognitive sciences, and human creativity intersect in the 21st century.',
             thumbnail: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&auto=format&fit=crop&q=60',
-            url: cleanUrl,
+            url: urlToCheck,
             itemCount: 4,
             qualities: [],
             playlistItems: [
@@ -259,7 +264,7 @@ export const urlAnalyzer = {
                 durationString: '54:00',
                 url: 'https://example.com/podcasts/ep42.mp3',
                 platform: 'Podcast',
-                estimatedSize1080pBytes: 129600000, // audio size
+                estimatedSize1080pBytes: 129600000,
               },
               {
                 id: 'pod-item-2',
@@ -297,26 +302,34 @@ export const urlAnalyzer = {
             ],
           });
         }
-        // 6. Direct media URL
+        // 6. Direct media URL (ignoring query parameters for extension checks)
         else if (
-          cleanUrl.endsWith('.mp4') ||
-          cleanUrl.endsWith('.mkv') ||
-          cleanUrl.endsWith('.mp3') ||
-          cleanUrl.endsWith('.webm') ||
-          cleanUrl.includes('direct')
+          urlToCheck.includes('direct') ||
+          urlToCheck.split('?')[0].endsWith('.mp4') ||
+          urlToCheck.split('?')[0].endsWith('.mkv') ||
+          urlToCheck.split('?')[0].endsWith('.mp3') ||
+          urlToCheck.split('?')[0].endsWith('.webm') ||
+          urlToCheck.split('?')[0].endsWith('.flac') ||
+          urlToCheck.split('?')[0].endsWith('.m4a')
         ) {
-          const isAudio = cleanUrl.endsWith('.mp3') || cleanUrl.includes('audio');
+          const cleanPath = urlToCheck.split('?')[0];
+          const isAudio = 
+            cleanPath.endsWith('.mp3') || 
+            cleanPath.endsWith('.flac') || 
+            cleanPath.endsWith('.m4a') || 
+            urlToCheck.includes('audio');
+
           resolve({
             type: isAudio ? 'audio' : 'video',
             platform: 'Direct Link',
-            title: cleanUrl.split('/').pop() || 'Direct Media File Download',
-            description: `Direct media stream parsed from remote server: ${cleanUrl}`,
+            title: cleanPath.split('/').pop() || 'Direct Media File Download',
+            description: `Direct media stream parsed from remote server: ${urlToCheck}`,
             thumbnail: isAudio
               ? 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&auto=format&fit=crop&q=60'
               : 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=500&auto=format&fit=crop&q=60',
             durationString: '02:40',
             durationSeconds: 160,
-            url: cleanUrl,
+            url: urlToCheck,
             qualities: isAudio
               ? [
                   { id: 'original', label: 'Original Audio Stream', sizeBytes: 15400000, codec: 'AAC', container: 'M4A', isAudioOnly: true },
@@ -332,17 +345,17 @@ export const urlAnalyzer = {
         else {
           // Check if looks like a URL
           try {
-            new URL(cleanUrl);
+            new URL(urlToCheck);
             // Valid URL, default to a simulated Video
             resolve({
               type: 'video',
               platform: 'Direct Link',
-              title: `Media stream from ${new URL(cleanUrl).hostname}`,
+              title: `Media stream from ${new URL(urlToCheck).hostname}`,
               description: 'A parsed media resource detected on the host website. Formats extracted dynamically.',
               thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=60',
               durationString: '05:00',
               durationSeconds: 300,
-              url: cleanUrl,
+              url: urlToCheck,
               qualities: [
                 { id: '1080p', label: '1080p (Full HD)', sizeBytes: 65000000, fps: 30, codec: 'H.264', container: 'MP4', isAudioOnly: false },
                 { id: '720p', label: '720p (HD)', sizeBytes: 35000000, fps: 30, codec: 'H.264', container: 'MP4', isAudioOnly: false },
