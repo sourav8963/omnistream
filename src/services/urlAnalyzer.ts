@@ -62,107 +62,156 @@ export const urlAnalyzer = {
           urlToCheck.includes('youtube.com/playlist') ||
           urlToCheck.includes('list=')
         ) {
-          resolve({
-            type: 'playlist',
-            platform: 'YouTube',
-            title: 'Ultimate Lo-Fi Coding Session Beats',
-            artist: 'Lofi Girl & Friends',
-            description: 'The ultimate compilation of mellow beats to code, study, and relax to. Updated daily.',
-            thumbnail: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=500&auto=format&fit=crop&q=60',
-            url: urlToCheck,
-            itemCount: 8,
-            qualities: [],
-            playlistItems: [
-              {
-                id: 'yt-item-1',
-                title: 'Coding in Tokyo (Midnight Ambient Beat)',
-                artist: 'Lofi Girl',
-                thumbnail: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 195,
-                durationString: '03:15',
-                url: 'https://www.youtube.com/watch?v=tokyo111',
+          let listId = 'PL4fGSI1pDJn5n4e05b5f884bf05b5a265';
+          try {
+            const urlObj = new URL(urlToCheck);
+            const listParam = urlObj.searchParams.get('list');
+            if (listParam) {
+              listId = listParam;
+            }
+          } catch {
+            // ignore
+          }
+
+          if (listId === 'PL4fGSI1pDJn5n4e05b5f884bf05b5a265') {
+            resolve({
+              type: 'playlist',
+              platform: 'YouTube',
+              title: 'Ultimate Lo-Fi Coding Session Beats',
+              artist: 'Lofi Girl & Friends',
+              description: 'The ultimate compilation of mellow beats to code, study, and relax to. Updated daily.',
+              thumbnail: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=500&auto=format&fit=crop&q=60',
+              url: urlToCheck,
+              itemCount: 8,
+              qualities: [],
+              playlistItems: [
+                {
+                  id: 'yt-item-1',
+                  title: 'Coding in Tokyo (Midnight Ambient Beat)',
+                  artist: 'Lofi Girl',
+                  thumbnail: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 195,
+                  durationString: '03:15',
+                  url: 'https://www.youtube.com/watch?v=tokyo111',
+                  platform: 'YouTube',
+                  estimatedSize1080pBytes: 42000000,
+                },
+                {
+                  id: 'yt-item-2',
+                  title: 'Rainy Night Coffee Shop (Jazz Hop)',
+                  artist: 'Coffee Beans',
+                  thumbnail: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 242,
+                  durationString: '04:02',
+                  url: 'https://www.youtube.com/watch?v=coffee222',
+                  platform: 'YouTube',
+                  estimatedSize1080pBytes: 52000000,
+                },
+                {
+                  id: 'yt-item-3',
+                  title: 'Cyberpunk Neon Workspace (Synthwave Lofi)',
+                  artist: 'Vector Graphics',
+                  thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 310,
+                  durationString: '05:10',
+                  url: 'https://www.youtube.com/watch?v=cyber333',
+                  platform: 'YouTube',
+                  estimatedSize1080pBytes: 68000000,
+                },
+                {
+                  id: 'yt-item-4',
+                  title: 'Chill Chill Coding (Chillhop Session)',
+                  artist: 'Nujabes Tribute',
+                  thumbnail: 'https://images.unsplash.com/photo-1487180142328-0c4e37023af5?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 188,
+                  durationString: '03:08',
+                  url: 'https://www.youtube.com/watch?v=chill444',
+                  platform: 'YouTube',
+                  estimatedSize1080pBytes: 40000000,
+                },
+                {
+                  id: 'yt-item-5',
+                  title: 'Autumn Wind & Piano Lofi',
+                  artist: 'Sora Keyboard',
+                  thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 215,
+                  durationString: '03:35',
+                  url: 'https://www.youtube.com/watch?v=autumn555',
+                  platform: 'YouTube',
+                  estimatedSize1080pBytes: 46000000,
+                },
+                {
+                  id: 'yt-item-6',
+                  title: 'Late Night Debugging Session',
+                  artist: 'StackOverflow Beats',
+                  thumbnail: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 290,
+                  durationString: '04:50',
+                  url: 'https://www.youtube.com/watch?v=debug666',
+                  platform: 'YouTube',
+                  estimatedSize1080pBytes: 62000000,
+                },
+                {
+                  id: 'yt-item-7',
+                  title: 'Sunday Morning Coffee & Git Push',
+                  artist: 'Commit History',
+                  thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 205,
+                  durationString: '03:25',
+                  url: 'https://www.youtube.com/watch?v=push777',
+                  platform: 'YouTube',
+                  estimatedSize1080pBytes: 44000000,
+                },
+                {
+                  id: 'yt-item-8',
+                  title: 'Deep Focus Ambient Drone',
+                  artist: 'Wavelengths',
+                  thumbnail: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 480,
+                  durationString: '08:00',
+                  url: 'https://www.youtube.com/watch?v=drone888',
+                  platform: 'YouTube',
+                  estimatedSize1080pBytes: 105000000,
+                },
+              ],
+            });
+          } else {
+            // Dynamically generate simulated playlist based on listId
+            const generatedItems = Array.from({ length: 6 }).map((_, i) => {
+              const trackNum = i + 1;
+              return {
+                id: `yt-item-${listId}-${trackNum}`,
+                title: `Playlist Track #${trackNum} (${listId})`,
+                artist: `YouTube Creator`,
+                thumbnail: `https://images.unsplash.com/photo-${[
+                  '1511671782779-c97d3d27a1d4',
+                  '1470225620780-dba8ba36b745',
+                  '1514525253161-7a46d19cd819',
+                  '1498038432885-c6f3f1b912ee',
+                  '1506157786151-b8491531f063',
+                  '1487180142328-0c4e37023af5'
+                ][i % 6]}?w=150&auto=format&fit=crop&q=60`,
+                durationSeconds: 180 + (i * 30),
+                durationString: `0${3 + i}:00`,
+                url: `https://www.youtube.com/watch?v=mock_${listId}_${trackNum}`,
                 platform: 'YouTube',
-                estimatedSize1080pBytes: 42000000,
-              },
-              {
-                id: 'yt-item-2',
-                title: 'Rainy Night Coffee Shop (Jazz Hop)',
-                artist: 'Coffee Beans',
-                thumbnail: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 242,
-                durationString: '04:02',
-                url: 'https://www.youtube.com/watch?v=coffee222',
-                platform: 'YouTube',
-                estimatedSize1080pBytes: 52000000,
-              },
-              {
-                id: 'yt-item-3',
-                title: 'Cyberpunk Neon Workspace (Synthwave Lofi)',
-                artist: 'Vector Graphics',
-                thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 310,
-                durationString: '05:10',
-                url: 'https://www.youtube.com/watch?v=cyber333',
-                platform: 'YouTube',
-                estimatedSize1080pBytes: 68000000,
-              },
-              {
-                id: 'yt-item-4',
-                title: 'Chill Chill Coding (Chillhop Session)',
-                artist: 'Nujabes Tribute',
-                thumbnail: 'https://images.unsplash.com/photo-1487180142328-0c4e37023af5?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 188,
-                durationString: '03:08',
-                url: 'https://www.youtube.com/watch?v=chill444',
-                platform: 'YouTube',
-                estimatedSize1080pBytes: 40000000,
-              },
-              {
-                id: 'yt-item-5',
-                title: 'Autumn Wind & Piano Lofi',
-                artist: 'Sora Keyboard',
-                thumbnail: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 215,
-                durationString: '03:35',
-                url: 'https://www.youtube.com/watch?v=autumn555',
-                platform: 'YouTube',
-                estimatedSize1080pBytes: 46000000,
-              },
-              {
-                id: 'yt-item-6',
-                title: 'Late Night Debugging Session',
-                artist: 'StackOverflow Beats',
-                thumbnail: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 290,
-                durationString: '04:50',
-                url: 'https://www.youtube.com/watch?v=debug666',
-                platform: 'YouTube',
-                estimatedSize1080pBytes: 62000000,
-              },
-              {
-                id: 'yt-item-7',
-                title: 'Sunday Morning Coffee & Git Push',
-                artist: 'Commit History',
-                thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 205,
-                durationString: '03:25',
-                url: 'https://www.youtube.com/watch?v=push777',
-                platform: 'YouTube',
-                estimatedSize1080pBytes: 44000000,
-              },
-              {
-                id: 'yt-item-8',
-                title: 'Deep Focus Ambient Drone',
-                artist: 'Wavelengths',
-                thumbnail: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 480,
-                durationString: '08:00',
-                url: 'https://www.youtube.com/watch?v=drone888',
-                platform: 'YouTube',
-                estimatedSize1080pBytes: 105000000,
-              },
-            ],
-          });
+                estimatedSize1080pBytes: 40000000 + (i * 10000000),
+              };
+            });
+
+            resolve({
+              type: 'playlist',
+              platform: 'YouTube',
+              title: `Playlist: ${listId}`,
+              artist: 'YouTube Creator',
+              description: `Dynamically analyzed YouTube playlist queue from URL parameter. Contains 6 media tracks.`,
+              thumbnail: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&auto=format&fit=crop&q=60',
+              url: urlToCheck,
+              itemCount: 6,
+              qualities: [],
+              playlistItems: generatedItems
+            });
+          }
         }
         // 2. YouTube Single Video
         else if (
@@ -244,63 +293,113 @@ export const urlAnalyzer = {
         }
         // 5. Podcast RSS Feed
         else if (urlToCheck.includes('podcast') || urlToCheck.includes('.rss') || urlToCheck.includes('/feed') || urlToCheck.includes('/rss')) {
-          resolve({
-            type: 'podcast',
-            platform: 'Podcast',
-            title: 'The Lexicon of AI (Tech & Society)',
-            artist: 'Dr. Sarah Vance',
-            description: 'Exploring how machine learning, cognitive sciences, and human creativity intersect in the 21st century.',
-            thumbnail: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&auto=format&fit=crop&q=60',
-            url: urlToCheck,
-            itemCount: 4,
-            qualities: [],
-            playlistItems: [
-              {
-                id: 'pod-item-1',
-                title: 'Episode 42: Quantum Computing Foundations',
-                artist: 'Dr. Sarah Vance',
-                thumbnail: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 3240,
-                durationString: '54:00',
-                url: 'https://example.com/podcasts/ep42.mp3',
+          let feedName = 'lexicon-ai';
+          try {
+            const urlObj = new URL(urlToCheck);
+            const pathParts = urlObj.pathname.split('/');
+            const lastPart = pathParts[pathParts.length - 1];
+            if (lastPart && lastPart.trim() && lastPart !== 'feed' && lastPart !== 'rss') {
+              feedName = lastPart.replace(/\.xml|\.rss/i, '');
+            } else if (urlObj.hostname) {
+              feedName = urlObj.hostname.replace('www.', '').split('.')[0];
+            }
+          } catch {
+            // ignore
+          }
+
+          if (urlToCheck.includes('lexicon-ai.xml')) {
+            resolve({
+              type: 'podcast',
+              platform: 'Podcast',
+              title: 'The Lexicon of AI (Tech & Society)',
+              artist: 'Dr. Sarah Vance',
+              description: 'Exploring how machine learning, cognitive sciences, and human creativity intersect in the 21st century.',
+              thumbnail: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&auto=format&fit=crop&q=60',
+              url: urlToCheck,
+              itemCount: 4,
+              qualities: [],
+              playlistItems: [
+                {
+                  id: 'pod-item-1',
+                  title: 'Episode 42: Quantum Computing Foundations',
+                  artist: 'Dr. Sarah Vance',
+                  thumbnail: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 3240,
+                  durationString: '54:00',
+                  url: 'https://example.com/podcasts/ep42.mp3',
+                  platform: 'Podcast',
+                  estimatedSize1080pBytes: 129600000,
+                },
+                {
+                  id: 'pod-item-2',
+                  title: 'Episode 41: Large Language Models and Common Sense',
+                  artist: 'Dr. Sarah Vance',
+                  thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 2880,
+                  durationString: '48:00',
+                  url: 'https://example.com/podcasts/ep41.mp3',
+                  platform: 'Podcast',
+                  estimatedSize1080pBytes: 115200000,
+                },
+                {
+                  id: 'pod-item-3',
+                  title: 'Episode 40: The Ethics of Artificial General Intelligence',
+                  artist: 'Dr. Sarah Vance',
+                  thumbnail: 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 4110,
+                  durationString: '01:08:30',
+                  url: 'https://example.com/podcasts/ep40.mp3',
+                  platform: 'Podcast',
+                  estimatedSize1080pBytes: 164400000,
+                },
+                {
+                  id: 'pod-item-4',
+                  title: 'Episode 39: Neural Interfaces and Cybernetics',
+                  artist: 'Dr. Sarah Vance',
+                  thumbnail: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=150&auto=format&fit=crop&q=60',
+                  durationSeconds: 3500,
+                  durationString: '58:20',
+                  url: 'https://example.com/podcasts/ep39.mp3',
+                  platform: 'Podcast',
+                  estimatedSize1080pBytes: 140000000,
+                },
+              ],
+            });
+          } else {
+            // Dynamically generate simulated Podcast feed
+            const generatedItems = Array.from({ length: 4 }).map((_, i) => {
+              const epNum = 5 - i;
+              return {
+                id: `pod-item-${feedName}-${epNum}`,
+                title: `Episode ${epNum}: Discussion on ${feedName.toUpperCase()}`,
+                artist: `Dr. Sarah Vance`,
+                thumbnail: `https://images.unsplash.com/photo-${[
+                  '1590602847861-f357a9332bbc',
+                  '1507146426996-ef05306b995a',
+                  '1618005182384-a83a8bd57fbe',
+                  '1558494949-ef010cbdcc31'
+                ][i % 4]}?w=150&auto=format&fit=crop&q=60`,
+                durationSeconds: 2400 + (i * 600),
+                durationString: `${40 + (i * 10)}:00`,
+                url: `https://example.com/podcasts/${feedName}_ep${epNum}.mp3`,
                 platform: 'Podcast',
-                estimatedSize1080pBytes: 129600000,
-              },
-              {
-                id: 'pod-item-2',
-                title: 'Episode 41: Large Language Models and Common Sense',
-                artist: 'Dr. Sarah Vance',
-                thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 2880,
-                durationString: '48:00',
-                url: 'https://example.com/podcasts/ep41.mp3',
-                platform: 'Podcast',
-                estimatedSize1080pBytes: 115200000,
-              },
-              {
-                id: 'pod-item-3',
-                title: 'Episode 40: The Ethics of Artificial General Intelligence',
-                artist: 'Dr. Sarah Vance',
-                thumbnail: 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 4110,
-                durationString: '01:08:30',
-                url: 'https://example.com/podcasts/ep40.mp3',
-                platform: 'Podcast',
-                estimatedSize1080pBytes: 164400000,
-              },
-              {
-                id: 'pod-item-4',
-                title: 'Episode 39: Neural Interfaces and Cybernetics',
-                artist: 'Dr. Sarah Vance',
-                thumbnail: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=150&auto=format&fit=crop&q=60',
-                durationSeconds: 3500,
-                durationString: '58:20',
-                url: 'https://example.com/podcasts/ep39.mp3',
-                platform: 'Podcast',
-                estimatedSize1080pBytes: 140000000,
-              },
-            ],
-          });
+                estimatedSize1080pBytes: 96000000 + (i * 24000000),
+              };
+            });
+
+            resolve({
+              type: 'podcast',
+              platform: 'Podcast',
+              title: `Show: ${feedName.toUpperCase()}`,
+              artist: 'RSS Podcast Publisher',
+              description: `Podcast RSS feed parsed from remote source URL: ${urlToCheck}`,
+              thumbnail: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&auto=format&fit=crop&q=60',
+              url: urlToCheck,
+              itemCount: 4,
+              qualities: [],
+              playlistItems: generatedItems
+            });
+          }
         }
         // 6. Direct media URL (ignoring query parameters for extension checks)
         else if (
